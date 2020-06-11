@@ -1,3 +1,3 @@
 from .config import Config
 
-cfg = Config("config.json")
+store = Config("config.json")
