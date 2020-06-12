@@ -1,5 +1,8 @@
 <h1 align="center">ModularBotForUser</h1>
-
+<p align="center">
+    <img src="https://img.shields.io/github/license/waitrum/ModularBotForUser?style=for-the-badge">
+    <img src="https://img.shields.io/github/repo-size/waitrum/ModularBotForUser?style=for-the-badge">
+</p>
 Модульный _**страничный**_ бот для вашей страницы ВКонтакте.
 
 ### Основной функционал:
@@ -10,6 +13,7 @@
     * Отправка лога сообщений по триггер слову.
         * **Только удаленных** сообщений.
         * Сообщение **определенного юзера**
+![GIF](/example/gif/LoggerGif.gif)
 
 * Модуль: **UserMention**
     * Отправка стикера по триггер слову.
@@ -45,9 +49,10 @@
 
 ### Настройка: `(configs/config.json)`
 > Настраивать после первого запуска программы!
+> Данные настройки появляются если включеные все предустановленные модули. 
 
-Name | Type | Info
---- | --- | ---
+Name                 |       Type       | Info
+---                  | ---              | ---
 token                | str              | Сюда вписывать токен страницы
 TriggerShowLog       | str              | Триггер слово для вывода лога <br> (добавление <+> выводит только удаленные сообщения).
 TriggerToAddChatLogs | str              | Триггер слово для добавления вайтлиста<br>(При добавлении чата логируются ГС, стикеры, фото, видео, музыка, документы.)
