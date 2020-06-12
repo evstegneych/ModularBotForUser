@@ -20,6 +20,7 @@ class Config:
         self.mentionLastFind = datetime.datetime.now()
         self.LastMyMessage = {}
 
+
     @staticmethod
     def get_path(p):
         return f"{os.getcwd()}/configs/{p}"
@@ -52,7 +53,7 @@ class Config:
                     print("У тебя неправильно настроен конфиг. Перезапусти скрипт и настрой config.json")
                     exit()
                 except Exception as s:
-                    print("Заполни все пустые строки в config.json")
+                    print(f"[config.json] {c} is empty.")
                     print(s)
                     exit()
 

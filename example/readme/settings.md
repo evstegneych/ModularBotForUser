@@ -1,4 +1,4 @@
-### Установка и запуск:
+## Установка и запуск:
 ```
 1. git clone https://github.com/Waitrum/ModularBotForUser
 2. cd ModularBotForUser
@@ -16,8 +16,9 @@
 
 
 
-### Настройка: `(configs/config.json)`
-> Настраивать после первого запуска программы!
+## Настройка: `(configs/config.json)`
+> Файл config.json появится после первого запуска программы.
+>
 > Данные настройки появляются если включеные все предустановленные модули. 
 
 Name                 |       Type       | Info

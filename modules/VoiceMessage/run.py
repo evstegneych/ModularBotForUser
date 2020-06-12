@@ -45,9 +45,9 @@ class Main(Base):
         self.disable = False
         self.event = event
         self.upload = VkUpload(store.bot.api)
-        self.user = self.event.user_id = store.bot.user_id
 
     def message_new(self):
+        self.user = self.event.user_id == store.bot.user_id
         if self.user:
             message: str = self.event.text.lower()
             if message.startswith(store.config.TriggerAddAudio):

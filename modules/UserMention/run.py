@@ -38,17 +38,16 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
-        self.user = self.event.user_id = store.bot.user_id
 
     def message_new(self):
-        find = CheckMarkUser(self.event.text.lower())
+        self.user = self.event.user_id == store.bot.user_id
         message = self.event.text.lower()
+        find = CheckMarkUser(message)
         if (
                 find
                 and not self.user
-                and self.event.peer_id not in store.config.IgnoreList
+                and self.event.peer_id not in store.config.IgnoreListMention
         ):
-
             if datetime.datetime.now() >= store.mentionLastFind:
                 choice_msg = random.choice(store.config.Answers)
                 try:
@@ -106,6 +105,7 @@ class Main(Base):
                 self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
                 store.save()
                 return
+
     def message_edit(self):
         return
 

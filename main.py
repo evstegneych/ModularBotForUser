@@ -56,6 +56,8 @@ def main():
 
                                 if event.type == VkEventType.MESSAGE_EDIT:
                                     mod.message_edit()
+                    except vk_api.exceptions.Captcha:
+                        print("Обнаружена капча!")
                     except Exception as e:
                         print(e, traceback.format_exc())
         except ReadTimeout:
