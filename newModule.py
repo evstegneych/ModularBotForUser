@@ -1,7 +1,7 @@
 import os
 import shutil
 
-nameNewModule = input("Как будет называться новый модуль:")
+nameNewModule = input("Как будет называться новый модуль:").strip()
 if nameNewModule in os.listdir("modules"):
     print("Модуль с таким именем уже существует!")
 else:

@@ -3,6 +3,8 @@
     <img src="https://img.shields.io/github/license/waitrum/ModularBotForUser?style=for-the-badge">
     <img src="https://img.shields.io/github/repo-size/waitrum/ModularBotForUser?style=for-the-badge">
 </p>
+<p align="center" style="opacity: 0.7">Таккая масса изза gif файлов.</p>
+<p align="center" style="opacity: 0.7">В будущем перенесется на другой хостинг</p>
 
 Модульный **_страничный бот_** для вашей страницы ВКонтакте.
 
@@ -35,8 +37,9 @@
 * Модуль: **ChatContest** `В разработке`
     * Создание розыгрышей среди участников беседы. 
 
-* Модуль: **VoiceMessage** `В разработке`
+* Модуль: **VoiceMessage** 
     * Отправка сохраненного ГС по триггер слову.
+    ![GIF](/example/gif/Audios.gif)
 ---
 
 ### Установка и запуск:
@@ -63,7 +66,7 @@
 
 Name                 |       Type       | Info
 ---                  | ---              | ---
-token                | str              | Сюда вписывать токен страницы
+token                | str              | Сюда вписывать токен страницы.
 TriggerShowLog       | str              | Триггер слово для вывода лога <br> (добавление <+> выводит только удаленные сообщения).
 TriggerToAddChatLogs | str              | Триггер слово для добавления вайтлиста<br>(При добавлении чата логируются ГС, стикеры, фото, видео, музыка, документы.)
 TriggerShowChatsLogs | str              | Триггер слово для показа всех бесед где включено логирование вложений.
@@ -78,3 +81,4 @@ TriggerAddStickers   | str              | Триггер для добавлен
 TriggerIgnore        | str              | Триггер слово для добавления диалога в игнор отправки стикера при упоминании.
 TriggerIgnoreList    | list[int]        | Массив диалогов в игнор листе.
 TimeOutDel           | int              | Задержка удаления системных сообщений.
+TriggerVoice         | str              | Триггер слово для добавления ГС.<br> Для Этого надо переслать сообщение с ГС и написать триггер.

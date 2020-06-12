@@ -1,5 +1,6 @@
 from vk_api.longpoll import Event, VkEventType
 
+from configs import store
 from utils import Base
 
 
@@ -13,6 +14,7 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
+        self.user = self.event.user_id = store.bot.user_id
 
     def message_new(self):
         return

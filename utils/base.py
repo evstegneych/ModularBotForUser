@@ -1,5 +1,6 @@
 import random
 import time
+from functools import lru_cache
 from threading import Thread
 
 from configs import store
@@ -55,7 +56,7 @@ class Base:
             arg = []
         Thread(target=void, args=[target, arg, timeout], daemon=True).start()
 
-    def MessagesSend(self, _peer_id, _text, disable_mentions=1):
+    def MessagesSend(self, _peer_id, _text="", disable_mentions=1, attachment=None):
         return store.bot.api.messages.send(peer_id=_peer_id,
                                            message=self.ReplaceBennedWord(_text.replace('&lt;', '<')
                                                                           .replace('&gt;', '>')
@@ -63,7 +64,8 @@ class Base:
                                                                           .replace('&amp;', '&')),
                                            random_id=random.randint(-1000000, 1000000),
                                            disable_mentions=disable_mentions,
-                                           dont_parse_links=1)
+                                           dont_parse_links=1,
+                                           attachment=attachment)
 
     @staticmethod
     def MessageDelete(mid, delete_for_all=1):
@@ -75,3 +77,8 @@ class Base:
         for c, v in banned_word.items():
             text = text.replace(c, v)
         return text
+
+    @staticmethod
+    @lru_cache(maxsize=32)
+    def UploadAuidos(src):
+        return
