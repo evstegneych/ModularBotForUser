@@ -21,7 +21,7 @@ class Message:
         self._text = ""
         self.attachments = []
         self.message_id = _message_id
-        self.date = datetime.datetime.now()
+        self.date = datetime.datetime.now().strftime("[%H:%M:%S]")
         self.deleted = False
         self.edited = False
         self.count_edited = 0
@@ -90,6 +90,10 @@ def GetAllAttachments(msg: Message):
             video = attach.get("video")
             if video:
                 msg.attachments.append(f"https://vk.com/video{video['owner_id']}_{video['id']}")
+
+            audio = attach.get("audio")
+            if audio:
+                msg.attachments.append(f"Музыка: {audio['artist']} -- {audio['title']}")
     return msg
 
 
@@ -149,13 +153,13 @@ class Main(Base):
                     lastUser = 0
                     logs = logs if len(logs) < 10 else logs[len(logs) - 10:]
                     for user in logs:
-                        a = "Все вложения:\n " + "\n".join(list(set(user.attachments))) + "\n"
+                        a = "Вложения:\n " + "\n".join(list(set(user.attachments))) + "\n"
                         if get_user_id or (lastUser == user.user_id):
                             name = "--"
                         else:
                             name = user.name
                         lastUser = user.user_id
-                        text += f"{name} {user.get_edited()}" \
+                        text += f"{user.date} {name} {user.get_edited()}" \
                                 f"{user.get_deleted()} {user.text}\n" \
                                 f"{a if user.attachments else ''}" \
                                 f"{'' if get_user_id else ''}"

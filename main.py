@@ -3,6 +3,7 @@ import sys
 import time
 import traceback
 
+import urllib3
 import vk_api
 from requests import ReadTimeout
 from vk_api.longpoll import VkLongPoll, VkEventType
@@ -57,8 +58,14 @@ def main():
         except ReadTimeout:
             pass
 
+        except ConnectionResetError:
+            pass
+
+        except urllib3.exceptions.ProtocolError:
+            pass
+
         except Exception as e:
-            print("Основной поток:\n", traceback.format_exc())
+            print("Основной поток:\n", e, traceback.format_exc())
             time.sleep(10)
 
 

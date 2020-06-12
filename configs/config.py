@@ -35,9 +35,10 @@ class Config:
                 shutil.copy(self.get_path('config.json.sample'), self.get_path('config.json'))
                 exit("Настрой файл config.json")
             except Exception as s:
-                exit("Проверьте ваши права на данную папку!")
-                # Чтобы линт не ругался
+                print("Проверьте ваши права на данную папку!")
                 print(s)
+                exit()
+
         else:
             self.load()
             for c, v in self.config.items():
@@ -45,11 +46,12 @@ class Config:
                     if v == "":
                         raise ValueError
                 except AttributeError:
-                    exit("У тебя неправильно настроен конфиг. Перезапусти скрипт и настрой config.json")
+                    print("У тебя неправильно настроен конфиг. Перезапусти скрипт и настрой config.json")
+                    exit()
                 except Exception as s:
-                    exit("Заполни все пустые строки в config.json")
-                    # Чтобы линт не ругался
+                    print("Заполни все пустые строки в config.json")
                     print(s)
+                    exit()
 
     def add_value(self, attr, value):
         self.config.update({attr: value})
