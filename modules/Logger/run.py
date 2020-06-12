@@ -105,7 +105,6 @@ class Main(Base):
     }
 
     def __init__(self, event: Event):
-
         self.disable = False
         self.event = event
 

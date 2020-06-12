@@ -64,6 +64,9 @@ def main():
         except urllib3.exceptions.ProtocolError:
             pass
 
+        except vk_api.exceptions.Captcha:
+            print("Обнаружена капча!")
+
         except Exception as e:
             print("Основной поток:\n", e, traceback.format_exc())
             time.sleep(10)

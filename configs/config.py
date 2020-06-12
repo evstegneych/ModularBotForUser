@@ -1,4 +1,5 @@
 import codecs
+import datetime
 import json
 import os
 import shutil
@@ -16,6 +17,7 @@ class Config:
 
         # for modules
         self.messages = {}
+        self.mentionLastFind = datetime.datetime.now()
 
     @staticmethod
     def get_path(p):

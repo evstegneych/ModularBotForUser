@@ -1,0 +1,4 @@
+objdict
+requests
+urllib3
+vk_api
