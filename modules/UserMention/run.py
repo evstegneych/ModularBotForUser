@@ -38,9 +38,11 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
+        self.user = None
+        if self.__flags__.get(event.type):
+            self.user = self.event.user_id == store.bot.user_id
 
     def message_new(self):
-        self.user = self.event.user_id == store.bot.user_id
         message = self.event.text.lower()
         find = CheckMarkUser(message)
         if (

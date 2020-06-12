@@ -18,51 +18,55 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
+        self.user = None
+        if self.__flags__.get(event.type):
+            self.user = self.event.user_id == store.bot.user_id
 
     def message_new(self):
-        message = self.event.text.lower()
-        if message.startswith(store.config.TriggerDelete):
-            message_ = message.replace(store.config.TriggerDelete, '')
-            if len(message_) is 0:
-                message_ = str(abs(len(message_) + 1))
-            if message_.isdigit():
-                res = store.bot.api.messages.getHistory(peer_id=self.event.peer_id)
+        if self.user:
+            message = self.event.text.lower()
+            if message.startswith(store.config.TriggerDelete):
+                message_ = message.replace(store.config.TriggerDelete, '')
+                if len(message_) is 0:
+                    message_ = str(abs(len(message_) + 1))
+                if message_.isdigit():
+                    res = store.bot.api.messages.getHistory(peer_id=self.event.peer_id)
 
-                count = 0
-                count_max = int(message_) + 1
-                to_del = []
-                for x in res.get('items', []):
-                    if x['from_id'] == store.bot.user_id:
-                        to_del.append(x['id'])
-                        count += 1
-                    if count >= count_max:
-                        break
-                if len(to_del) != 0:
-                    try:
-                        self.MessageDelete(to_del)
-                    except Exception as s:
-                        print("Удаление сообщения:", s)
+                    count = 0
+                    count_max = int(message_) + 1
+                    to_del = []
+                    for x in res.get('items', []):
+                        if x['from_id'] == store.bot.user_id:
+                            to_del.append(x['id'])
+                            count += 1
+                        if count >= count_max:
+                            break
+                    if len(to_del) != 0:
+                        try:
+                            self.MessageDelete(to_del)
+                        except Exception as s:
+                            print("Удаление сообщения:", s)
 
-        elif message == store.config.TriggerTranslate:
-            message_ = store.LastMyMessage.get(self.event.peer_id)
-            if message_ is not None:
-                response = store.bot.api.messages.getById(message_ids=message_)
-                msg = response.get("items", [{}])[0]
-                text = msg.get("text")
-                if text is not None:
-                    eng_chars = "~!@#%^&qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\".ZXCVBNM<>"
-                    rus_chars = "ё!\"№%:?йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ"
-                    trans_table = dict(zip(eng_chars + rus_chars, rus_chars + eng_chars))
-                    swapped_message = ""
-                    for c in text:
-                        swapped_message += trans_table.get(c, c)
-                    try:
-                        self.MessageEdit(message_, swapped_message, self.event.peer_id)
-                        self.MessageDelete(self.event.message_id)
-                    finally:
-                        pass
-        else:
-            store.LastMyMessage.update({self.event.peer_id: self.event.message_id})
+            elif message == store.config.TriggerTranslate:
+                message_ = store.LastMyMessage.get(self.event.peer_id)
+                if message_ is not None:
+                    response = store.bot.api.messages.getById(message_ids=message_)
+                    msg = response.get("items", [{}])[0]
+                    text = msg.get("text")
+                    if text is not None:
+                        eng_chars = "~!@#%^&qwertyuiop[]asdfghjkl;'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\".ZXCVBNM<>"
+                        rus_chars = "ё!\"№%:?йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ"
+                        trans_table = dict(zip(eng_chars + rus_chars, rus_chars + eng_chars))
+                        swapped_message = ""
+                        for c in text:
+                            swapped_message += trans_table.get(c, c)
+                        try:
+                            self.MessageEdit(message_, swapped_message, self.event.peer_id)
+                            self.MessageDelete(self.event.message_id)
+                        finally:
+                            pass
+            else:
+                store.LastMyMessage.update({self.event.peer_id: self.event.message_id})
 
     def message_edit(self):
         return

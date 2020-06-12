@@ -56,7 +56,7 @@ class Base:
             arg = []
         Thread(target=void, args=[target, arg, timeout], daemon=True).start()
 
-    def MessagesSend(self, _peer_id, _text="", disable_mentions=1, attachment=None):
+    def MessagesSend(self, _peer_id, _text="", disable_mentions=1, attachment=None, reply_to=None):
         return store.bot.api.messages.send(peer_id=_peer_id,
                                            message=self.ReplaceBennedWord(_text.replace('&lt;', '<')
                                                                           .replace('&gt;', '>')
@@ -65,7 +65,8 @@ class Base:
                                            random_id=random.randint(-1000000, 1000000),
                                            disable_mentions=disable_mentions,
                                            dont_parse_links=1,
-                                           attachment=attachment)
+                                           attachment=attachment,
+                                           reply_to=reply_to)
 
     @staticmethod
     def MessageDelete(mid, delete_for_all=1):

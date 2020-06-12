@@ -45,9 +45,11 @@ class Main(Base):
         self.disable = False
         self.event = event
         self.upload = VkUpload(store.bot.api)
+        self.user = None
+        if self.__flags__.get(event.type):
+            self.user = self.event.user_id == store.bot.user_id
 
     def message_new(self):
-        self.user = self.event.user_id == store.bot.user_id
         if self.user:
             message: str = self.event.text.lower()
             if message.startswith(store.config.TriggerAddAudio):
@@ -81,7 +83,15 @@ class Main(Base):
                             store.config.audio_cache[
                                 message] = f"doc{audio['owner_id']}_{audio['id']}_{audio['access_key']}"
                             store.save()
-                    self.MessagesSend(_peer_id=self.event.peer_id, attachment=store.config.audio_cache.get(message))
+                    res = store.bot.api.messages.getById(message_ids=self.event.message_id)["items"]
+                    reply_to = None
+                    if res:
+                        response = res[0]
+                        reply_message = response.get("reply_message")
+                        if reply_message:
+                            reply_to = reply_message['id']
+                    self.MessagesSend(_peer_id=self.event.peer_id, attachment=store.config.audio_cache.get(message),
+                                      reply_to=reply_to)
                     self.MessageDelete(self.event.message_id)
 
     def message_edit(self):
