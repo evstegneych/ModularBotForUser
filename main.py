@@ -24,8 +24,8 @@ for file in plugin_folder_files:
     try:
         modules.append(__import__(os.path.splitext(file)[0]).Main)
         print(f"Загружен модуль {file}")
-    except Exception:
-        pass
+    except Exception as s:
+        print(file, "-", s)
 
 
 def main():
@@ -44,17 +44,20 @@ def main():
         try:
             for event in longpoll.listen():
                 for module in modules:
-                    mod = module(event)
-                    if not mod.disable:
-                        if mod.__flags__.get(event.type):
-                            if event.type == VkEventType.MESSAGE_NEW:
-                                mod.message_new()
+                    try:
+                        mod = module(event)
+                        if not mod.disable:
+                            if mod.__flags__.get(event.type):
+                                if event.type == VkEventType.MESSAGE_NEW:
+                                    mod.message_new()
 
-                            if event.type == VkEventType.MESSAGE_FLAGS_SET and event.raw[2] & 131072:
-                                mod.message_delete()
+                                if event.type == VkEventType.MESSAGE_FLAGS_SET and event.raw[2] & 131072:
+                                    mod.message_delete()
 
-                            if event.type == VkEventType.MESSAGE_EDIT:
-                                mod.message_edit()
+                                if event.type == VkEventType.MESSAGE_EDIT:
+                                    mod.message_edit()
+                    except Exception as e:
+                        print(e, traceback.format_exc())
         except ReadTimeout:
             pass
 

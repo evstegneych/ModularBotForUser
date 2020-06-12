@@ -18,6 +18,7 @@ class Config:
         # for modules
         self.messages = {}
         self.mentionLastFind = datetime.datetime.now()
+        self.LastMyMessage = {}
 
     @staticmethod
     def get_path(p):

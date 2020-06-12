@@ -8,9 +8,12 @@ from vk_api.longpoll import Event, VkEventType
 from configs import store
 from utils import Base
 
+store if store.config.get("TriggerAddStickers") else store.add_value("TriggerAddStickers", "!+")
+store if store.config.get("TriggerIgnoreMention") else store.add_value("TriggerIgnoreMention", "!игнор")
 store if store.config.get("TimeWait") else store.add_value("TimeWait", 5)
+store if store.config.get("TimeOutDel") else store.add_value("TimeOutDel", 10)
 store if store.config.get("Answers") else store.add_value("Answers", [])
-store if store.config.get("IgnoreList") else store.add_value("IgnoreList", [])
+store if store.config.get("IgnoreListMention") else store.add_value("IgnoreListMention", [])
 store if store.config.get("TriggerStickers") else store.add_value("TriggerStickers", [])
 store.save()
 
@@ -35,12 +38,14 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
+        self.user = self.event.user_id = store.bot.user_id
 
     def message_new(self):
         find = CheckMarkUser(self.event.text.lower())
+        message = self.event.text.lower()
         if (
                 find
-                and self.event.user_id != store.bot.user_id
+                and not self.user
                 and self.event.peer_id not in store.config.IgnoreList
         ):
 
@@ -58,7 +63,49 @@ class Main(Base):
                     print("Отправка сообещния на упоминание:", s)
                 finally:
                     store.mentionLastFind = datetime.datetime.now() + datetime.timedelta(minutes=store.config.TimeWait)
+        elif message == store.config.TriggerIgnoreMention and self.user:
+            dialog_id = self.event.peer_id
+            if dialog_id in store.config.IgnoreListMention:
+                store.config.IgnoreListMention.remove(dialog_id)
+                self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> удален из игнор листа.",
+                                 dialog_id)
+            else:
+                store.config.IgnoreListMention.append(self.event.peer_id)
+                self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> добавлен в игнор лист.",
+                                 dialog_id)
+            self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
+            store.save()
+            return
 
+        elif message.startswith(store.config.TriggerAddStickers):
+            sticker_id = None
+            response = store.bot.api.messages.getById(message_ids=self.event.message_id)["items"]
+            if response:
+                response = response[0]
+                get_sticker = response.get("reply_message")
+                if get_sticker is None:
+                    get_sticker = response.get("fwd_messages")
+                    if get_sticker:
+                        get_sticker = get_sticker[0]
+                    else:
+                        get_sticker = None
+                if get_sticker is not None:
+                    attach = get_sticker.get("attachments")
+                    if attach:
+                        attach = attach[0].get("sticker")
+                        if attach is not None:
+                            sticker_id = attach["sticker_id"]
+            if sticker_id is not None:
+                if sticker_id in store.config.Answers:
+                    store.config.Answers.remove(sticker_id)
+                    self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> удален.", self.event.peer_id)
+                else:
+                    store.config.Answers.append(sticker_id)
+                    self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> добавлен.",
+                                     self.event.peer_id)
+                self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
+                store.save()
+                return
     def message_edit(self):
         return
 
