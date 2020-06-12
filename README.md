@@ -14,18 +14,27 @@
     * Отправка лога сообщений по триггер слову.
         * **Только удаленных** сообщений.
         * Сообщение **определенного юзера**
-![GIF](/example/gif/LoggerGif.gif)
+
+    ![GIF](/example/gif/LoggerGif.gif)
+
 * Модуль: **UserMention**
     * Отправка стикера по триггер слову.
-![GIF](/example/gif/Mention.gif)
-![GIF](/example/gif/MentionAdd.gif)
+    
+    ![GIF](/example/gif/Mention.gif)
+    ![GIF](/example/gif/MentionAdd.gif)
+
 * Модуль: **UserUtils**
     * Удаление последних нескольких сообщений по триггер слову.
-![GIF](/example/gif/Delete.gif)
+
+    ![GIF](/example/gif/Delete.gif)
+    
     * Транслит последнего сообщения в диалоге EN->RU и наоборот по триггер слову.
-![GIF](/example/gif/Translate.gif)
+    
+    ![GIF](/example/gif/Translate.gif)
+       
 * Модуль: **ChatContest** `В разработке`
     * Создание розыгрышей среди участников беседы. 
+
 * Модуль: **VoiceMessage** `В разработке`
     * Отправка сохраненного ГС по триггер слову.
 ---
