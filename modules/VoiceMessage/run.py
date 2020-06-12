@@ -50,8 +50,8 @@ class Main(Base):
     def message_new(self):
         if self.user:
             message: str = self.event.text.lower()
-            if message.startswith(store.config.TriggerVoice):
-                name = message.replace(store.config.TriggerVoice, "").strip()
+            if message.startswith(store.config.TriggerAddAudio):
+                name = message.replace(store.config.TriggerAddAudio, "").strip()
                 res = store.bot.api.messages.getById(message_ids=self.event.message_id)["items"]
                 get_id = None
                 if res:
@@ -69,8 +69,8 @@ class Main(Base):
                         self.MessageDelete(self.event.message_id)
                         loadAudios()
                         return
-            elif message.startswith("."):
-                message = message.replace(".", "", 1).strip()
+            elif message.startswith(store.config.TriggerAudio):
+                message = message.replace(store.config.TriggerAudio, "", 1).strip()
                 if message in audios:
                     cached = store.config.audio_cache.get(message)
                     if not cached:
