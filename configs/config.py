@@ -20,7 +20,6 @@ class Config:
         self.mentionLastFind = datetime.datetime.now()
         self.LastMyMessage = {}
 
-
     @staticmethod
     def get_path(p):
         return f"{os.getcwd()}/configs/{p}"
@@ -34,7 +33,7 @@ class Config:
             json.dump(self.config, file, ensure_ascii=False, indent=4)
 
     def check(self):
-        if isfile('config.json'):
+        if not isfile(self.get_path('config.json')):
             try:
                 shutil.copy(self.get_path('config.json.sample'), self.get_path('config.json'))
                 exit("Настрой файл config.json")
