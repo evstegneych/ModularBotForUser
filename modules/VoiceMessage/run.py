@@ -7,7 +7,8 @@ from vk_api.upload import VkUpload
 from configs import store
 from utils import Base
 
-store if store.config.get("TriggerVoice") else store.add_value("TriggerVoice", "!гс")
+store if store.config.get("TriggerAddAudio") else store.add_value("TriggerAddAudio", "!гс")
+store if store.config.get("TriggerAudio") else store.add_value("TriggerAudio", ".")
 store if store.config.get("audio_cache") else store.add_value("audio_cache", {})
 store.save()
 
