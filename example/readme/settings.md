@@ -2,7 +2,7 @@
 ```
 1. git clone https://github.com/Waitrum/ModularBotForUser
 2. cd ModularBotForUser
-3. pip install requirements.txt
+3. pip install -r requirements.txt
 
 Без запуска в фоне:
 4. python3.7 main.py
