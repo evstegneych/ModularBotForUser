@@ -46,12 +46,9 @@ class Main(Base):
         self.disable = False
         self.event = event
         self.upload = VkUpload(store.bot.api)
-        self.user = None
-        if self.__flags__.get(event.type):
-            self.user = self.event.user_id == store.bot.user_id
 
     def message_new(self):
-        if self.user:
+        if self.event.user_id == store.bot.user_id:
             message: str = self.event.text.lower()
             if message.startswith(store.config.TriggerAddAudio):
                 name = message.replace(store.config.TriggerAddAudio, "").strip()

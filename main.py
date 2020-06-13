@@ -59,7 +59,11 @@ def main():
                     except vk_api.exceptions.Captcha:
                         print("Обнаружена капча!")
                     except Exception as e:
-                        print(e, traceback.format_exc())
+                        print('\n'.join([
+                            str(e),
+                            traceback.format_exc(),
+                            str(event.raw), str(event.type)
+                        ]))
         except ReadTimeout:
             pass
 

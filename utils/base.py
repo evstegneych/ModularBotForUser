@@ -33,10 +33,6 @@ def void(target, arg=None, timeout=None):
 
 class Base:
     @staticmethod
-    def test():
-        return "test"
-
-    @staticmethod
     def GetNameUsers(user_ids):
         names = []
         resp = store.bot.api.users.get(user_ids=user_ids)

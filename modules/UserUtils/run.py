@@ -18,16 +18,13 @@ class Main(Base):
     def __init__(self, event: Event):
         self.disable = False
         self.event = event
-        self.user = None
-        if self.__flags__.get(event.type):
-            self.user = self.event.user_id == store.bot.user_id
 
     def message_new(self):
-        if self.user:
+        if self.event.user_id == store.bot.user_id:
             message = self.event.text.lower()
             if message.startswith(store.config.TriggerDelete):
                 message_ = message.replace(store.config.TriggerDelete, '')
-                if len(message_) is 0:
+                if not len(message_):
                     message_ = str(abs(len(message_) + 1))
                 if message_.isdigit():
                     res = store.bot.api.messages.getHistory(peer_id=self.event.peer_id)
