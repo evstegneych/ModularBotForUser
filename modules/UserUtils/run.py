@@ -20,7 +20,7 @@ class Main(Base):
         self.event = event
 
     def message_new(self):
-        if self.event.user_id == store.bot.user_id:
+        if self.event.user_id == store.bot.user_id and self.event.from_chat:
             message = self.event.text.lower()
             if message.startswith(store.config.TriggerDelete):
                 message_ = message.replace(store.config.TriggerDelete, '')

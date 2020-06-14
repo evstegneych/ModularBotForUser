@@ -48,7 +48,7 @@ class Main(Base):
         self.upload = VkUpload(store.bot.api)
 
     def message_new(self):
-        if self.event.user_id == store.bot.user_id:
+        if self.event.user_id == store.bot.user_id and self.event.from_chat:
             message: str = self.event.text.lower()
             if message.startswith(store.config.TriggerAddAudio):
                 name = message.replace(store.config.TriggerAddAudio, "").strip()

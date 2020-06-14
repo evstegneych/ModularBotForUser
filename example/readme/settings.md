@@ -7,7 +7,7 @@
 Без запуска в фоне:
 4. python3.7 main.py
 
-С запускои в фоне:
+С запуском в фоне:
 4. apt install npm
 5. npm install pm2 -g
 6. pm2 start main.py --name=LoggerBot --interpreter=python3.7

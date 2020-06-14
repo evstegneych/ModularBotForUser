@@ -40,69 +40,70 @@ class Main(Base):
         self.event = event
 
     def message_new(self):
-        message = self.event.text.lower()
-        find = CheckMarkUser(message)
-        if self.event.user_id != store.bot.user_id:
-            if find and self.event.peer_id not in store.config.IgnoreListMention:
-                if datetime.datetime.now() >= store.mentionLastFind:
-                    choice_msg = random.choice(store.config.Answers)
-                    try:
-                        time.sleep(.3)
-                        if isinstance(choice_msg, int):
-                            store.bot.api.messages.send(peer_id=self.event.peer_id, sticker_id=choice_msg,
-                                                        random_id=random.randint(-1000000, 1000000))
-                        else:
-                            store.bot.api.messages.send(peer_id=self.event.peer_id, message=choice_msg,
-                                                        random_id=random.randint(-1000000, 1000000))
-                    except Exception as s:
-                        print("Отправка сообещния на упоминание:", s)
-                    finally:
-                        store.mentionLastFind = datetime.datetime.now() + datetime.timedelta(
-                            minutes=store.config.TimeWait)
-        else:
-            if message == store.config.TriggerIgnoreMention:
-                dialog_id = self.event.peer_id
-                if dialog_id in store.config.IgnoreListMention:
-                    store.config.IgnoreListMention.remove(dialog_id)
-                    self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> удален из игнор листа.",
-                                     dialog_id)
-                else:
-                    store.config.IgnoreListMention.append(self.event.peer_id)
-                    self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> добавлен в игнор лист.",
-                                     dialog_id)
-                self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
-                store.save()
-                return
-
-            elif message.startswith(store.config.TriggerAddStickers):
-                sticker_id = None
-                response = store.bot.api.messages.getById(message_ids=self.event.message_id)["items"]
-                if response:
-                    response = response[0]
-                    get_sticker = response.get("reply_message")
-                    if get_sticker is None:
-                        get_sticker = response.get("fwd_messages")
-                        if get_sticker:
-                            get_sticker = get_sticker[0]
-                        else:
-                            get_sticker = None
-                    if get_sticker is not None:
-                        attach = get_sticker.get("attachments")
-                        if attach:
-                            attach = attach[0].get("sticker")
-                            if attach is not None:
-                                sticker_id = attach["sticker_id"]
-                if sticker_id is not None:
-                    if sticker_id in store.config.Answers:
-                        store.config.Answers.remove(sticker_id)
-                        self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> удален.", self.event.peer_id)
+        if self.event.from_chat:
+            message = self.event.text.lower()
+            find = CheckMarkUser(message)
+            if self.event.user_id != store.bot.user_id:
+                if find and self.event.peer_id not in store.config.IgnoreListMention:
+                    if datetime.datetime.now() >= store.mentionLastFind:
+                        choice_msg = random.choice(store.config.Answers)
+                        try:
+                            time.sleep(.3)
+                            if isinstance(choice_msg, int):
+                                store.bot.api.messages.send(peer_id=self.event.peer_id, sticker_id=choice_msg,
+                                                            random_id=random.randint(-1000000, 1000000))
+                            else:
+                                store.bot.api.messages.send(peer_id=self.event.peer_id, message=choice_msg,
+                                                            random_id=random.randint(-1000000, 1000000))
+                        except Exception as s:
+                            print("Отправка сообещния на упоминание:", s)
+                        finally:
+                            store.mentionLastFind = datetime.datetime.now() + datetime.timedelta(
+                                minutes=store.config.TimeWait)
+            else:
+                if message == store.config.TriggerIgnoreMention:
+                    dialog_id = self.event.peer_id
+                    if dialog_id in store.config.IgnoreListMention:
+                        store.config.IgnoreListMention.remove(dialog_id)
+                        self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> удален из игнор листа.",
+                                         dialog_id)
                     else:
-                        store.config.Answers.append(sticker_id)
-                        self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> добавлен.",
-                                         self.event.peer_id)
+                        store.config.IgnoreListMention.append(self.event.peer_id)
+                        self.MessageEdit(self.event.message_id, f"Диалог <<{dialog_id}>> добавлен в игнор лист.",
+                                         dialog_id)
                     self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
                     store.save()
                     return
+
+                elif message.startswith(store.config.TriggerAddStickers):
+                    sticker_id = None
+                    response = store.bot.api.messages.getById(message_ids=self.event.message_id)["items"]
+                    if response:
+                        response = response[0]
+                        get_sticker = response.get("reply_message")
+                        if get_sticker is None:
+                            get_sticker = response.get("fwd_messages")
+                            if get_sticker:
+                                get_sticker = get_sticker[0]
+                            else:
+                                get_sticker = None
+                        if get_sticker is not None:
+                            attach = get_sticker.get("attachments")
+                            if attach:
+                                attach = attach[0].get("sticker")
+                                if attach is not None:
+                                    sticker_id = attach["sticker_id"]
+                    if sticker_id is not None:
+                        if sticker_id in store.config.Answers:
+                            store.config.Answers.remove(sticker_id)
+                            self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> удален.",
+                                             self.event.peer_id)
+                        else:
+                            store.config.Answers.append(sticker_id)
+                            self.MessageEdit(self.event.message_id, f"Стикер <<{sticker_id}>> добавлен.",
+                                             self.event.peer_id)
+                        self.run(self.MessageDelete, arg=[self.event.message_id], timeout=store.config.TimeOutDel)
+                        store.save()
 
     def message_edit(self):
         return
