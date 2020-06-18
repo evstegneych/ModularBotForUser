@@ -54,7 +54,7 @@ class Base:
 
     def MessagesSend(self, _peer_id, _text="", disable_mentions=1, attachment=None, reply_to=None):
         return store.bot.api.messages.send(peer_id=_peer_id,
-                                           message=self.ReplaceBennedWord(_text.replace('&lt;', '<')
+                                           message=self.ReplaceBannedWord(_text.replace('&lt;', '<')
                                                                           .replace('&gt;', '>')
                                                                           .replace('&quot;', '"')
                                                                           .replace('&amp;', '&')),
@@ -70,12 +70,12 @@ class Base:
                                       delete_for_all=delete_for_all)
 
     @staticmethod
-    def ReplaceBennedWord(text):
+    def ReplaceBannedWord(text):
         for c, v in banned_word.items():
             text = text.replace(c, v)
         return text
 
     @staticmethod
     @lru_cache(maxsize=32)
-    def UploadAuidos(src):
+    def UploadAudio(src):
         return

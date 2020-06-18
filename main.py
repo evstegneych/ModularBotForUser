@@ -46,9 +46,9 @@ def main():
                 for module in modules:
                     try:
                         mod = module(event)
-                        if not mod.disable and "user_id" in dir(event):
+                        if not mod.disable:
                             if mod.__flags__.get(event.type):
-                                if event.type == VkEventType.MESSAGE_NEW:
+                                if event.type == VkEventType.MESSAGE_NEW and "user_id" in dir(event):
                                     mod.message_new()
 
                                 if event.type == VkEventType.MESSAGE_FLAGS_SET and event.raw[2] & 131072:
