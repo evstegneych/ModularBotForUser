@@ -19,7 +19,7 @@ store.save()
 
 
 def CheckMarkUser(for_finder):
-    finder = re.search(rf"(\s+|^)({'|'.join(store.config.TriggerStickers)})(\s+|$)", for_finder)
+    finder = re.search(rf"(\s+|^)({re.escape('|'.join(store.config.TriggerStickers))})(\s+|$)", for_finder)
     if finder is not None:
         return True
     finder = re.search(rf"\[id{store.bot.user_id}\|(?:|@).{{2,15}}\]", for_finder)

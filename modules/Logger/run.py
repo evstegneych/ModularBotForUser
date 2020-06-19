@@ -154,11 +154,11 @@ class Main(Base):
                     for user in logs:
                         a = "Вложения:\n " + "\n".join(list(set(user.attachments))) + "\n"
                         if get_user_id or (lastUser == user.user_id):
-                            name = "--"
+                            name = ""
                         else:
-                            name = user.name
+                            name = user.name + "\n"
                         lastUser = user.user_id
-                        text += f"{user.date} {name} {user.get_edited()}" \
+                        text += f"{name}{user.date} -- {user.get_edited()}" \
                                 f"{user.get_deleted()} {user.text}\n" \
                                 f"{a if user.attachments else ''}" \
                                 f"{'' if get_user_id else ''}"
