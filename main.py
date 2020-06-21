@@ -49,7 +49,8 @@ def main():
                         if not mod.disable:
                             if mod.__flags__.get(event.type):
                                 if event.type == VkEventType.MESSAGE_NEW and "user_id" in dir(event):
-                                    mod.message_new()
+                                    if event.user_id > 0:
+                                        mod.message_new()
 
                                 if event.type == VkEventType.MESSAGE_FLAGS_SET and event.raw[2] & 131072:
                                     mod.message_delete()

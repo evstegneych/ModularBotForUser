@@ -19,9 +19,14 @@ store.save()
 
 
 def CheckMarkUser(for_finder):
-    finder = re.search(rf"(\s+|^)({re.escape('|'.join(store.config.TriggerStickers))})(\s+|$)", for_finder)
-    if finder is not None:
-        return True
+    _for_finder = for_finder.split()
+    for x in store.config.TriggerStickers:
+        if x.lower() in _for_finder:
+            return True
+    # if store.config.TriggerStickers:
+    #     finder = re.search(rf"(\s+|^)({re.escape('|'.join(store.config.TriggerStickers))})(\s+|$)", for_finder)
+    #     if finder is not None:
+    #         return True
     finder = re.search(rf"\[id{store.bot.user_id}\|(?:|@).{{2,15}}\]", for_finder)
     if finder is not None:
         return True
@@ -46,20 +51,21 @@ class Main(Base):
             if self.event.user_id != store.bot.user_id:
                 if find and self.event.peer_id not in store.config.IgnoreListMention:
                     if datetime.datetime.now() >= store.mentionLastFind:
-                        choice_msg = random.choice(store.config.Answers)
-                        try:
-                            time.sleep(.3)
-                            if isinstance(choice_msg, int):
-                                store.bot.api.messages.send(peer_id=self.event.peer_id, sticker_id=choice_msg,
-                                                            random_id=random.randint(-1000000, 1000000))
-                            else:
-                                store.bot.api.messages.send(peer_id=self.event.peer_id, message=choice_msg,
-                                                            random_id=random.randint(-1000000, 1000000))
-                        except Exception as s:
-                            print("Отправка сообещния на упоминание:", s)
-                        finally:
-                            store.mentionLastFind = datetime.datetime.now() + datetime.timedelta(
-                                minutes=store.config.TimeWait)
+                        if len(store.config.Answers):
+                            choice_msg = random.choice(store.config.Answers)
+                            try:
+                                time.sleep(.3)
+                                if isinstance(choice_msg, int):
+                                    store.bot.api.messages.send(peer_id=self.event.peer_id, sticker_id=choice_msg,
+                                                                random_id=random.randint(-1000000, 1000000))
+                                else:
+                                    store.bot.api.messages.send(peer_id=self.event.peer_id, message=choice_msg,
+                                                                random_id=random.randint(-1000000, 1000000))
+                            except Exception as s:
+                                print("Отправка сообещния на упоминание:", s)
+                            finally:
+                                store.mentionLastFind = datetime.datetime.now() + datetime.timedelta(
+                                    minutes=store.config.TimeWait)
             else:
                 if message == store.config.TriggerIgnoreMention:
                     dialog_id = self.event.peer_id
