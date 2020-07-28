@@ -64,7 +64,7 @@ def main():
                             str(e),
                             traceback.format_exc(),
                             str(event.raw), str(event.type)
-                        ]))
+                        ]), end="\n-----------------------------\n")
         except ReadTimeout:
             pass
 

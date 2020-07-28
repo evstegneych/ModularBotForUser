@@ -193,7 +193,7 @@ class Main(Base):
                         user = GetAllAttachments(user)
                     user.text += f"\n↓\n{self.event.text[:100]}"
                     user.edited = True
-                    user.count_edited += 1
+                user.count_edited += 1
                 if user.count_edited == 5:
                     user.text += f"\n[Редактирований > 5]"
 
