@@ -3,9 +3,9 @@
     <img src="https://img.shields.io/github/license/waitrum/ModularBotForUser?style=for-the-badge">
     <img src="https://img.shields.io/github/repo-size/waitrum/ModularBotForUser?style=for-the-badge">
 </p>
-<p align="center">Такой вес изза .gif файлов.<br>В будущем перенесется на другой хостинг</p>
+<p align="center">Такой вес из-за .gif файлов.<br>В будущем перенесется на другой хостинг</p>
 
-Модульный **_страничный бот_** для вашей страницы ВКонтакте.
+Модульный **_бот_** для вашей страницы ВКонтакте.
 > Стабильная работа обеспечена на _**Python3.7**_
 
 ## Настройка
